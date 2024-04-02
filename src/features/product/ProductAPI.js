@@ -4,7 +4,7 @@ export async function fetchAllProducts() {
   return data;
 }
 
-export async function fetchProductsByFilters(filter, sort) {
+export async function fetchProductsByFilters(filter, sort, pagination) {
   //filter = {"category":["smartPhone","laptops"],"brand":["apple"]}
   // sort={"_sort":"rating"} or {"_sort":"-rating"}
   let queryString = "";
@@ -19,7 +19,23 @@ export async function fetchProductsByFilters(filter, sort) {
   for (let key in sort) {
     queryString += `_sort=${sort[key]}&`;
   }
+
+  for (let key in pagination) {
+    console.log(pagination);
+    queryString += `${key}=${pagination[key]}&`;
+  }
+
   console.log("http://localhost:8080/products?" + queryString);
   const data = await axios.get("http://localhost:8080/products?" + queryString);
-  return data;
+  return {
+    products: data.data.data,
+    pageDetails: {
+      first: data.data.first,
+      last: data.data.last,
+      prev: data.data.prev,
+      next: data.data.next,
+      pages: data.data.pages,
+      totalItems: data.data.items,
+    },
+  };
 }

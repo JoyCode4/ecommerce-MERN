@@ -8,6 +8,7 @@ import {
 const initialState = {
   products: [],
   status: "idle",
+  pageDetails:{}
 };
 
 export const fetchAllProductsAsync = createAsyncThunk(
@@ -19,9 +20,10 @@ export const fetchAllProductsAsync = createAsyncThunk(
 );
 export const fetchProductsByFiltersAsync = createAsyncThunk(
   "product/fetchProductsByFilters",
-  async ({ filter, sort }) => {
-    const response = await fetchProductsByFilters(filter, sort);
-    return response.data;
+  async ({ filter, sort, pagination }) => {
+    const response = await fetchProductsByFilters(filter, sort, pagination);
+    console.log(response);
+    return response;
   }
 );
 
@@ -43,11 +45,13 @@ export const productSlice = createSlice({
       })
       .addCase(fetchProductsByFiltersAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.products = action.payload;
+        state.products = action.payload.products;
+        state.pageDetails = action.payload.pageDetails;
       });
   },
 });
 
 export const selectProducts = (state) => state.product.products;
+export const selectPageDetails = (state) => state.product.pageDetails;
 
 export default productSlice.reducer;
