@@ -39,3 +39,13 @@ export async function fetchProductsByFilters(filter, sort, pagination) {
     },
   };
 }
+
+export async function fetchCategories() {
+  const data = await axios.get("http://localhost:8080/categories");
+  return data;
+}
+
+export async function fetchBrands() {
+  const data = await axios.get("http://localhost:8080/brands");
+  return data;
+}
