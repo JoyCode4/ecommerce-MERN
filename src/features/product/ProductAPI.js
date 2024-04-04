@@ -49,3 +49,8 @@ export async function fetchBrands() {
   const data = await axios.get("http://localhost:8080/brands");
   return data;
 }
+
+export async function fetchProductById(id) {
+  const data = await axios.get("http://localhost:8080/products/"+id);
+  return data;
+}
