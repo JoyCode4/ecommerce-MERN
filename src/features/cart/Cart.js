@@ -1,14 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  increment,
-  incrementAsync,
-  selectCount,
+  deleteCartItemAsync,
   selectItems,
   updateCartAsync,
 } from "./cartSlice";
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
 export default function Cart({ link, name }) {
@@ -23,6 +19,10 @@ export default function Cart({ link, name }) {
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
   const handleCartUpdate = (e, item) => {
     dispatch(updateCartAsync({ ...item, quantity: +e.target.value }));
+  };
+
+  const handleDelete = (e, id) => {
+    dispatch(deleteCartItemAsync(id));
   };
 
   return (
@@ -68,14 +68,15 @@ export default function Cart({ link, name }) {
                         >
                           <option value="1">1</option>
                           <option value="2">2</option>
-                          <option value="2">3</option>
-                          <option value="2">4</option>
-                          <option value="2">5</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
                         </select>
                       </div>
 
                       <div className="flex">
                         <button
+                          onClick={(e) => handleDelete(e, item.id)}
                           type="button"
                           className="font-medium text-indigo-600 hover:text-indigo-500"
                         >

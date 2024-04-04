@@ -22,3 +22,8 @@ export const updateCart = async (update) => {
   console.log(data);
   return data;
 };
+
+export const deleteCartItem = async (itemId) => {
+  await axios.delete("http://localhost:8080/cart/" + itemId);
+  return itemId;
+};
