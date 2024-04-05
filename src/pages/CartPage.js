@@ -4,7 +4,7 @@ import Cart from "../features/cart/Cart";
 export default function CartPage() {
   return (
     <div>
-      <Cart link={"/checkout"} name={"Checkout"} />
+      <Cart link={"/checkout"} name={"Checkout"} data={null} />
     </div>
   );
 }

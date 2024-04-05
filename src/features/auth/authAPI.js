@@ -25,3 +25,8 @@ export async function checkUser(loginInfo) {
     }
   });
 }
+
+export async function updateUser(update) {
+  const response = await axios.patch("http://localhost:8080/users/"+update.id, update);
+  return response;
+}

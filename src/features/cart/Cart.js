@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteCartItemAsync,
-  selectItems,
-  updateCartAsync,
-} from "./cartSlice";
-import { Link } from "react-router-dom";
+import { deleteCartItemAsync, selectItems, updateCartAsync } from "./cartSlice";
+import { Link, Navigate } from "react-router-dom";
+import { createOrderAsync } from "../order/orderSlice";
 
-export default function Cart({ link, name }) {
+export default function Cart({ link, name, data }) {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
@@ -25,8 +22,26 @@ export default function Cart({ link, name }) {
     dispatch(deleteCartItemAsync(id));
   };
 
+  const handleOrder = () => {
+    const order = {
+      items,
+      totalAmount,
+      totalItems,
+      user: data.user,
+      paymentMethod: data.paymentMethod,
+      selectedAddress: data.selectedAddress,
+    };
+    dispatch(createOrderAsync(order));
+
+    // TODO
+    // 1.Redirect to order-success page
+    // 2.clear cart after order
+    // 3.on server change the stock number of items after order
+  };
+
   return (
     <>
+      {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
       <div className="mx-auto mt-24 max-w-7xl px-4 sm:px-6 lg:px-8 bg-white">
         <h1 className="text-4xl my-10 pt-10 font-bold tracking-tight text-gray-900">
           Cart
@@ -104,13 +119,22 @@ export default function Cart({ link, name }) {
             Shipping and taxes calculated at checkout.
           </p>
           <div className="mt-6">
-            <Link
-              to={link}
-              href="#"
-              className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-            >
-              {name}
-            </Link>
+            {link === "/checkout" ? (
+              <Link
+                to={link}
+                href="#"
+                className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              >
+                {name}
+              </Link>
+            ) : (
+              <div
+                onClick={handleOrder}
+                className="flex cursor-pointer items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              >
+                {name}
+              </div>
+            )}
           </div>
           <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
             <p>
