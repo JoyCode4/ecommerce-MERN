@@ -27,3 +27,12 @@ export const deleteCartItem = async (itemId) => {
   await axios.delete("http://localhost:8080/cart/" + itemId);
   return itemId;
 };
+
+export const resetCart = async (userId) => {
+  const data = await axios.get("http://localhost:8080/cart?user=" + userId);
+  const items = await data.data;
+  for (let item of items) {
+    await deleteCartItem(item.id);
+  }
+  return { status: "success" };
+};

@@ -30,6 +30,7 @@ export default function Cart({ link, name, data }) {
       user: data.user,
       paymentMethod: data.paymentMethod,
       selectedAddress: data.selectedAddress,
+      status: "pending",
     };
     dispatch(createOrderAsync(order));
 
